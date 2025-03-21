@@ -1,0 +1,1 @@
+This repository is for the North Coast Gnarwhals website.  The North Coast Gnarwhals are the Cleveland area’s only team affiliated with the National Interscholastic Cycling Association (NICA) and compete as part of the Ohio Interscholastic Cycling League.
