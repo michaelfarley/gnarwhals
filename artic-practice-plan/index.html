@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>North Coast Gnarwhals · Arctic — NICA Training Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16201a;
+    --paper:#f4f1e8;
+    --card:#fbfaf4;
+    --line:#cfc8b3;
+    --easy:#2f6d3b;
+    --easy-bg:#e6efe2;
+    --easy-tag:#2f6d3b;
+    --hard:#b3401a;
+    --hard-bg:#f6e6dd;
+    --hard-tag:#b3401a;
+    --rest:#7a7257;
+    --gravel:#9a7b3f;
+    --accent:#1c3a2b;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Archivo',sans-serif;
+    line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1100px;margin:0 auto;padding:32px 24px 64px;}
+
+  /* Header */
+  header{
+    border-bottom:4px solid var(--ink);
+    padding-bottom:18px;margin-bottom:8px;
+    display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;
+  }
+  .title-block h1{
+    font-family:'Oswald',sans-serif;
+    font-weight:700;text-transform:uppercase;letter-spacing:1px;
+    font-size:clamp(28px,5vw,46px);margin:0;line-height:0.98;
+  }
+  .title-block .sub{
+    font-family:'Oswald',sans-serif;font-weight:400;text-transform:uppercase;
+    letter-spacing:3px;font-size:13px;color:var(--accent);margin-top:6px;
+  }
+  .meta{
+    text-align:right;font-size:13px;color:var(--rest);font-weight:500;
+    font-family:'Oswald',sans-serif;letter-spacing:0.5px;line-height:1.5;
+  }
+  .meta strong{color:var(--ink);}
+
+  /* Zone key */
+  .keybar{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0 30px;
+  }
+  .zone{
+    border:2px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--card);
+    border-left-width:8px;
+  }
+  .zone.easy{border-left-color:var(--easy);}
+  .zone.hard{border-left-color:var(--hard);}
+  .zone.sprint{border-left-color:#c9a227;}
+  .zone .zname{font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;font-size:16px;letter-spacing:1px;}
+  .zone .zdesc{font-size:12.5px;color:var(--rest);margin-top:3px;}
+  .zone .zname span{font-size:11px;font-weight:500;color:var(--rest);letter-spacing:0.5px;}
+
+  /* Block heading */
+  .block{margin-top:36px;}
+  .block-head{
+    display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:6px;margin-bottom:4px;
+  }
+  .block-head h2{
+    font-family:'Oswald',sans-serif;text-transform:uppercase;font-weight:700;letter-spacing:2px;
+    font-size:22px;margin:0;
+  }
+  .block-head .dates{font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:1px;color:var(--rest);}
+  .block-goal{font-size:13.5px;color:var(--accent);font-style:italic;margin:8px 0 14px;}
+
+  /* Sessions */
+  .sessions{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:720px){.sessions{grid-template-columns:1fr;} .keybar{grid-template-columns:1fr;} .card.placeholder{display:none;}}
+  .card{
+    background:var(--card);border:1.5px solid var(--line);border-radius:12px;overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .card.easy{border-top:6px solid var(--easy);}
+  .card.hard{border-top:6px solid var(--hard);}
+  .card.placeholder{
+    border:1.5px dashed var(--line);background:transparent;align-items:center;justify-content:center;
+    text-align:center;color:var(--rest);min-height:140px;
+  }
+  .card.placeholder .ph-day{font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;font-size:13px;}
+  .card.placeholder .ph-note{font-size:12px;font-style:italic;margin-top:6px;padding:0 18px;}
+  .card.done{border-top:6px solid var(--line);opacity:0.72;}
+  .daytag.done{background:var(--rest);}
+  .card-top{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:10px 16px 8px;border-bottom:1px dashed var(--line);
+  }
+  .date{font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;letter-spacing:0.5px;}
+  .daytag{
+    font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;font-size:11px;
+    letter-spacing:1.5px;padding:3px 9px;border-radius:20px;color:#fff;
+  }
+  .daytag.easy{background:var(--easy);}
+  .daytag.hard{background:var(--hard);}
+  .card-body{padding:12px 16px 16px;font-size:13.5px;}
+  .label{
+    font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:1px;font-weight:600;
+    font-size:13px;margin-bottom:4px;
+  }
+  .label.easy{color:var(--easy);}
+  .label.hard{color:var(--hard);}
+  .terrain{
+    display:inline-block;font-family:'Oswald',sans-serif;font-size:10.5px;font-weight:600;
+    letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:4px;margin-bottom:9px;
+  }
+  .terrain.single{background:#e7ded0;color:#6b4f23;border:1px solid #cdbfa3;}
+  .terrain.gravel{background:#ece3cd;color:var(--gravel);border:1px solid #d8c79c;}
+  .set{margin:0;padding:0;list-style:none;}
+  .set li{position:relative;padding-left:16px;margin-bottom:5px;}
+  .set li::before{content:"";position:absolute;left:0;top:7px;width:6px;height:6px;background:var(--ink);border-radius:50%;}
+  .set li b{font-weight:700;}
+  .cue{margin-top:9px;font-size:12px;color:var(--rest);font-style:italic;border-top:1px dotted var(--line);padding-top:7px;}
+
+  /* Race / taper callout */
+  .callout{
+    margin-top:32px;border:2px dashed var(--hard);background:var(--hard-bg);border-radius:12px;padding:18px 22px;
+  }
+  .callout h3{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:1.5px;margin:0 0 8px;color:var(--hard);font-size:17px;}
+  .callout p{margin:0 0 8px;font-size:13.5px;}
+  .callout p:last-child{margin-bottom:0;}
+
+  .rules{margin-top:30px;border-top:3px solid var(--ink);padding-top:16px;}
+  .rules h3{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:1.5px;font-size:16px;margin:0 0 10px;}
+  .rules ul{margin:0;padding-left:18px;font-size:13.5px;}
+  .rules li{margin-bottom:7px;}
+  .rules li b{color:var(--accent);}
+
+  footer{margin-top:30px;font-size:11.5px;color:var(--rest);text-align:center;font-family:'Oswald',sans-serif;letter-spacing:1px;}
+
+  @media print{
+    body{background:#fff;}
+    .wrap{max-width:100%;padding:0;}
+    .card,.zone,.callout{break-inside:avoid;}
+    .block{break-inside:avoid;}
+    @page{margin:1.2cm;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="title-block">
+      <h1>Arctic — Summer Practice Plan</h1>
+      <div class="sub">North Coast Gnarwhals &middot; NICA MTB &middot; Mon + Thu &middot; 6:00–7:30 PM</div>
+    </div>
+    <div class="meta">
+      <strong>5–7 riders &middot; ages 13–16</strong><br>
+      June 2 → first race (August)<br>
+      ~85 min riding / session &middot; gravel ≤25%
+    </div>
+  </header>
+
+  <!-- ZONE KEY -->
+  <div class="keybar">
+    <div class="zone easy">
+      <div class="zname">Easy <span>· engine</span></div>
+      <div class="zdesc">Talk in <b>full sentences</b>; could nose-breathe. Gasping between words = too hard, back off.</div>
+    </div>
+    <div class="zone hard">
+      <div class="zname">Hard <span>· 3–8 min</span></div>
+      <div class="zdesc">Breathing hard, a few words only. The effort you could <b>just</b> hold for the whole interval — not a blow-up.</div>
+    </div>
+    <div class="zone sprint">
+      <div class="zname">Sprint <span>· 30 sec</span></div>
+      <div class="zdesc">Near-max, no talking. Don't pace it — just go, then fully recover.</div>
+    </div>
+  </div>
+  <p style="font-size:12.5px;color:var(--rest);margin:-14px 0 0;">
+    Kids ride on breathing/talk test. Your Apple Watch is the <b>audit</b>: if you're in your own Z2 setting the climb pace from the front, the riders on your wheel are at or below it.
+  </p>
+
+  <!-- BASE BLOCK -->
+  <div class="block">
+    <div class="block-head">
+      <h2>① Base Block</h2>
+      <span class="dates">Jun 4 – Jul 2</span>
+    </div>
+    <div class="block-goal">Build the aerobic engine; add leg-speed snap without denting the base. Easy means easy.</div>
+    <div class="sessions">
+
+      <div class="card done">
+        <div class="card-top"><span class="date">Mon · Jun 1</span><span class="daytag done">✓ Done</span></div>
+        <div class="card-body">
+          <span class="terrain single">Already completed</span>
+          <div class="label" style="color:var(--rest);">In the books</div>
+          <ul class="set">
+            <li>Already ridden</li>
+            <li>Structured plan below picks up Thu Jun 4</li>
+          </ul>
+          <div class="cue">Going forward, Mondays are the engine day.</div>
+        </div>
+      </div>
+
+      <div class="card hard">
+        <div class="card-top"><span class="date">Thu · Jun 4</span><span class="daytag hard">Snap</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel/asphalt warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label hard">Short sprints</div>
+          <ul class="set">
+            <li>~10 min build warmup (gravel)</li>
+            <li><b>8 × 30 sec Sprint</b> — you call each on the clock</li>
+            <li>2.5–3 min easy spin between each</li>
+            <li>10 min cooldown</li>
+          </ul>
+          <div class="cue">Keep sprints crisp, recoveries genuinely easy.</div>
+        </div>
+      </div>
+
+      <div class="card easy">
+        <div class="card-top"><span class="date">Mon · Jun 8</span><span class="daytag easy">Engine</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label easy">Aerobic base</div>
+          <ul class="set">
+            <li>15 min steady gravel warmup</li>
+            <li>~60 min singletrack ridden <b>Easy</b></li>
+            <li>Spin climbs in a low gear; coast descents</li>
+            <li>~10 min easy cooldown (trail spin-down)</li>
+          </ul>
+          <div class="cue">Police the climbs: full-sentence talk test on every climb or back off.</div>
+        </div>
+      </div>
+
+      <div class="card hard">
+        <div class="card-top"><span class="date">Thu · Jun 11</span><span class="daytag hard">Snap</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label hard">Short sprints</div>
+          <ul class="set">
+            <li>~10 min warmup</li>
+            <li><b>9 × 30 sec Sprint</b> / 2.5–3 min easy</li>
+            <li>10 min cooldown</li>
+          </ul>
+          <div class="cue">Same as Jun 4, one more rep.</div>
+        </div>
+      </div>
+
+      <div class="card easy">
+        <div class="card-top"><span class="date">Mon · Jun 15</span><span class="daytag easy">Engine</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label easy">Aerobic base</div>
+          <ul class="set">
+            <li>15 min gravel warmup → ~60 min Easy singletrack</li>
+            <li>Easy spun climbs, coasting descents</li>
+            <li>~10 min easy cooldown (trail spin-down)</li>
+          </ul>
+          <div class="cue">If they're racing the climbs, you've lost the day. Reset pace from the front.</div>
+        </div>
+      </div>
+
+      <div class="card hard">
+        <div class="card-top"><span class="date">Thu · Jun 18</span><span class="daytag hard">Snap</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label hard">Short sprints</div>
+          <ul class="set">
+            <li>~10 min warmup</li>
+            <li><b>10 × 30 sec Sprint</b> / 2.5–3 min easy</li>
+            <li>10 min cooldown</li>
+          </ul>
+          <div class="cue">Top of the sprint progression.</div>
+        </div>
+      </div>
+
+      <div class="card easy">
+        <div class="card-top"><span class="date">Mon · Jun 22</span><span class="daytag easy">Engine</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label easy">Aerobic base</div>
+          <ul class="set">
+            <li>15 min gravel warmup → ~60 min Easy singletrack</li>
+            <li>Easy spun climbs, coasting descents</li>
+            <li>~10 min easy cooldown (trail spin-down)</li>
+          </ul>
+          <div class="cue">Hold the discipline — this is where the gains hide.</div>
+        </div>
+      </div>
+
+      <div class="card hard">
+        <div class="card-top"><span class="date">Thu · Jun 25</span><span class="daytag hard">Snap</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label hard">Short sprints</div>
+          <ul class="set">
+            <li>~10 min warmup</li>
+            <li><b>10 × 30 sec Sprint</b> / 2.5–3 min easy</li>
+            <li>10 min cooldown</li>
+          </ul>
+          <div class="cue">Last pure-snap week before intensity ramps.</div>
+        </div>
+      </div>
+
+      <div class="card easy">
+        <div class="card-top"><span class="date">Mon · Jun 29</span><span class="daytag easy">Engine</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label easy">Aerobic base</div>
+          <ul class="set">
+            <li>15 min gravel warmup → ~60 min Easy singletrack</li>
+            <li>Easy spun climbs, coasting descents</li>
+            <li>~10 min easy cooldown (trail spin-down)</li>
+          </ul>
+          <div class="cue">Final base engine day.</div>
+        </div>
+      </div>
+
+      <div class="card hard">
+        <div class="card-top"><span class="date">Thu · Jul 2</span><span class="daytag hard">Snap → Build</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label hard">Bridge to intervals</div>
+          <ul class="set">
+            <li>~10 min warmup</li>
+            <li><b>6 × 30 sec Sprint</b> / full recovery</li>
+            <li>then <b>2 × 3 min Hard</b> / 3 min easy (preview)</li>
+            <li>10 min cooldown</li>
+          </ul>
+          <div class="cue">Introduce the 3-min effort feel before July's full VO2 work.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BUILD BLOCK -->
+  <div class="block">
+    <div class="block-head">
+      <h2>② Build Block</h2>
+      <span class="dates">Jul 6 – Jul 30</span>
+    </div>
+    <div class="block-goal">Engine day holds steady; Thursday becomes real race-specific intensity. Race pace finally earns its place — on fresher legs.</div>
+    <div class="sessions">
+
+      <div class="card easy">
+        <div class="card-top"><span class="date">Mon · Jul 6</span><span class="daytag easy">Engine</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label easy">Aerobic base — protect it</div>
+          <ul class="set">
+            <li>15 min gravel warmup → ~60 min Easy singletrack</li>
+            <li>Easy spun climbs, coasting descents</li>
+            <li>~10 min easy cooldown (trail spin-down)</li>
+          </ul>
+          <div class="cue">This day does NOT become a second hard day. Ever.</div>
+        </div>
+      </div>
+
+      <div class="card hard">
+        <div class="card-top"><span class="date">Thu · Jul 9</span><span class="daytag hard">Intensity · VO2</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label hard">VO2 intervals</div>
+          <ul class="set">
+            <li>15 min warmup</li>
+            <li><b>4 × 3 min Hard</b> / 3 min easy</li>
+            <li>Call each on the clock; climbs are where they'll land</li>
+            <li>10 min cooldown</li>
+          </ul>
+          <div class="cue">Hard = could just hold 3 min, not a 1-min blow-up.</div>
+        </div>
+      </div>
+
+      <div class="card easy">
+        <div class="card-top"><span class="date">Mon · Jul 13</span><span class="daytag easy">Engine</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label easy">Aerobic base</div>
+          <ul class="set">
+            <li>15 min gravel warmup → ~60 min Easy singletrack</li>
+            <li>Easy spun climbs, coasting descents</li>
+            <li>~10 min easy cooldown (trail spin-down)</li>
+          </ul>
+          <div class="cue">Recovery between two harder Thursdays — keep it honest.</div>
+        </div>
+      </div>
+
+      <div class="card hard">
+        <div class="card-top"><span class="date">Thu · Jul 16</span><span class="daytag hard">Intensity · VO2</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label hard">VO2 intervals</div>
+          <ul class="set">
+            <li>15 min warmup</li>
+            <li><b>5 × 3 min Hard</b> / 3 min easy</li>
+            <li>10 min cooldown</li>
+          </ul>
+          <div class="cue">One more rep than last week.</div>
+        </div>
+      </div>
+
+      <div class="card easy">
+        <div class="card-top"><span class="date">Mon · Jul 20</span><span class="daytag easy">Engine</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label easy">Aerobic base</div>
+          <ul class="set">
+            <li>15 min gravel warmup → ~60 min Easy singletrack</li>
+            <li>Easy spun climbs, coasting descents</li>
+            <li>~10 min easy cooldown (trail spin-down)</li>
+          </ul>
+          <div class="cue">Engine stays lit while intensity shifts to threshold.</div>
+        </div>
+      </div>
+
+      <div class="card hard">
+        <div class="card-top"><span class="date">Thu · Jul 23</span><span class="daytag hard">Intensity · Threshold</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label hard">Threshold</div>
+          <ul class="set">
+            <li>15 min warmup</li>
+            <li><b>2–3 × 8 min Hard</b> / 4 min easy</li>
+            <li>"Comfortably hard," sustainable</li>
+            <li>10 min cooldown</li>
+          </ul>
+          <div class="cue">Longer, lower than VO2 — pacing discipline matters.</div>
+        </div>
+      </div>
+
+      <div class="card easy">
+        <div class="card-top"><span class="date">Mon · Jul 27</span><span class="daytag easy">Engine</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label easy">Aerobic base</div>
+          <ul class="set">
+            <li>15 min gravel warmup → ~60 min Easy singletrack</li>
+            <li>Easy spun climbs, coasting descents</li>
+            <li>~10 min easy cooldown (trail spin-down)</li>
+          </ul>
+          <div class="cue">Fresh legs for Thursday's race-sim.</div>
+        </div>
+      </div>
+
+      <div class="card hard">
+        <div class="card-top"><span class="date">Thu · Jul 30</span><span class="daytag hard">Intensity · Race-Sim</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label hard">Race simulation</div>
+          <ul class="set">
+            <li>15 min warmup</li>
+            <li><b>15–20 min continuous race-sim lap</b></li>
+            <li>Attack climbs, hold tech, surge out of corners</li>
+            <li>Optional: 2–3 × 30 sec Sprint to finish</li>
+            <li>10 min cooldown</li>
+          </ul>
+          <div class="cue">Closest thing to the real NICA demand. This is the peak build effort.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SHARPEN / TAPER BLOCK -->
+  <div class="block">
+    <div class="block-head">
+      <h2>③ Sharpen + Taper</h2>
+      <span class="dates">Aug 3 → first race</span>
+    </div>
+    <div class="block-goal">Keep intensity sharp but cut volume so they arrive springy, not cooked. Position the taper in the final 7–10 days before YOUR race date.</div>
+    <div class="sessions">
+
+      <div class="card easy">
+        <div class="card-top"><span class="date">Mon · Aug 3</span><span class="daytag easy">Engine</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label easy">Aerobic base</div>
+          <ul class="set">
+            <li>15 min gravel warmup → ~60 min Easy singletrack</li>
+            <li>Easy spun climbs, coasting descents</li>
+            <li>~10 min easy cooldown (trail spin-down)</li>
+          </ul>
+          <div class="cue">Full engine day by default. Only shorten if your first race is THIS weekend (then ~30 min, easy).</div>
+        </div>
+      </div>
+
+      <div class="card hard">
+        <div class="card-top"><span class="date">Thu · Aug 6</span><span class="daytag hard">Sharpen</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label hard">Sharpening</div>
+          <ul class="set">
+            <li>15 min warmup</li>
+            <li><b>3–4 × 2–3 min Hard</b> / full recovery</li>
+            <li>+ <b>3–4 × 30 sec Sprint</b> for snap</li>
+            <li>10 min cooldown</li>
+          </ul>
+          <div class="cue">Intensity stays; total work shrinks.</div>
+        </div>
+      </div>
+
+      <div class="card easy">
+        <div class="card-top"><span class="date">Mon · Aug 10</span><span class="daytag easy">Engine</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label easy">Aerobic base</div>
+          <ul class="set">
+            <li>15 min gravel warmup → ~60 min Easy singletrack</li>
+            <li>Easy spun climbs, coasting descents</li>
+            <li>~10 min easy cooldown (trail spin-down)</li>
+          </ul>
+          <div class="cue">Full length unless race is this weekend → then cut to ~30 min, light, for taper.</div>
+        </div>
+      </div>
+
+      <div class="card hard">
+        <div class="card-top"><span class="date">Thu · Aug 13</span><span class="daytag hard">Sharpen / Pre-race</span></div>
+        <div class="card-body">
+          <span class="terrain gravel">Gravel warmup</span><span class="terrain single">Singletrack</span>
+          <div class="label hard">Openers or sharpen</div>
+          <ul class="set">
+            <li><b>If race is &gt;1 wk out:</b> 3 × 2–3 min Hard + a few sprints</li>
+            <li><b>If race is this weekend:</b> "openers" — 3–4 × 1 min Hard + 3 × 20 sec Sprint, then stop. Short, snappy, finish fresh.</li>
+          </ul>
+          <div class="cue">Never add hard volume into a race week. End feeling under-worked.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- IN-SEASON CALLOUT -->
+  <div class="callout">
+    <h3>⚑ Once Races Start (practices continue)</h3>
+    <p>The races are now your hard intensity — don't pile hard practice volume on top of racing, that's how kids show up flat.</p>
+    <p><b>Normal week:</b> Mon = short quality (a few 2–3 min Hard or 30-sec Sprints) &middot; Thu = genuinely easy recovery spin.</p>
+    <p><b>Race week (weekend race):</b> FLIP IT. Thursday is too close to a Sat/Sun race to recover from — make <b>Mon = quality</b>, <b>Thu = easy/openers</b>, and let the <b>weekend race be the hard effort.</b></p>
+  </div>
+
+  <!-- STANDING RULES -->
+  <div class="rules">
+    <h3>Standing Rules</h3>
+    <ul>
+      <li><b>Protect the easy day.</b> Strong, motivated kids turn everything into a race. The Monday engine day is what makes Thursday's intensity actually intense — it is not filler.</li>
+      <li><b>Intervals run on the clock, not on a feature.</b> Single loop = you can't stage reps on a chosen rise. So YOU call every effort off your watch — "3 min hard, GO" / "30 sec, GO" — and they ride hard from wherever they are. On a descent where hard pedaling is pointless, they keep the effort going as terrain allows and you let it count. Climbs are simply where the hard efforts will naturally bite hardest.</li>
+      <li><b>Easy climbs are the whole game on the engine day.</b> Z2 dies on MTB climbs. Gear down, spin, full-sentence talk test on every climb. Let descents coast.</li>
+      <li><b>Gravel ≤ 25% every session.</b> It lives in the warmup/cooldown bookends, where steady effort is easiest to hold anyway.</li>
+      <li><b>Watch the 13-yr-olds.</b> Wide age range = different recovery. If a younger rider is flat or cranky two sessions running, quietly back them off — no big deal made of it.</li>
+      <li><b>Your watch audits, the kids' breathing prescribes.</b> If you're in your own Z2 setting climb pace from the front, the wheel behind you is at or below it.</li>
+    </ul>
+  </div>
+
+  <footer>NORTH COAST GNARWHALS &middot; ARCTIC &middot; NICA MTB &middot; BUILD JUN 2 → AUG &middot; ADJUST TAPER TO YOUR ACTUAL RACE DATE</footer>
+
+</div>
+</body>
+</html>
